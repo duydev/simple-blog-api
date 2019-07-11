@@ -1,0 +1,42 @@
+{
+  "name": "simple-blog-api",
+  "version": "1.0.0",
+  "description": "This is my blog.",
+  "main": "src/index.ts",
+  "repository": "https://github.com/duydev/simple-blog-api.git",
+  "author": "Trần Nhật Duy <duytn.hcm@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/debug": "^4.1.4",
+    "@types/node": "^12.6.2",
+    "nodemon": "^1.19.1",
+    "ts-node": "^8.3.0",
+    "tslint": "^5.18.0",
+    "tslint-config-airbnb-base": "^0.3.0",
+    "typescript": "^3.5.3"
+  },
+  "dependencies": {
+    "better-npm-run": "^0.1.1",
+    "debug": "^4.1.1",
+    "dotenv": "^8.0.0"
+  },
+  "betterScripts": {
+    "run:prod": {
+      "command": "yarn build && node .",
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    "run:dev": {
+      "command": "nodemon",
+      "env": {
+        "DEBUG": "app:*"
+      }
+    }
+  },
+  "scripts": {
+    "start": "bnr run:prod",
+    "dev": "bnr run:dev",
+    "build": "rm -rf build/ && tsc"
+  }
+}
