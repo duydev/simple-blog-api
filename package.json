@@ -36,11 +36,14 @@
     "helmet": "^3.18.0",
     "lodash": "^4.17.14",
     "morgan": "^1.9.1",
+    "pg": "^7.11.0",
+    "sequelize": "^5.10.0",
+    "sequelize-cli": "^5.5.0",
     "winston": "^3.2.1"
   },
   "betterScripts": {
     "run:prod": {
-      "command": "yarn build && node .",
+      "command": "yarn build && node build/index.js",
       "env": {
         "NODE_ENV": "production"
       }

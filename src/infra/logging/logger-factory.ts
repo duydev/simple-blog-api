@@ -10,6 +10,7 @@ export class LoggerFactory implements ILoggerFactory {
     const logFolder = this.config.logging.path || 'logs/';
 
     const logger = winston.createLogger({
+      level: this.config.logging.level,
       exitOnError: false,
       transports: [
         new winston.transports.Console({

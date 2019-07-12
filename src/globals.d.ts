@@ -21,6 +21,13 @@ export type Config = {
     level?: string;
     path?: string;
   };
+  database?: {
+    host?: string;
+    port?: number;
+    user?: string;
+    pass?: string;
+    name: string;
+  };
 };
 
 export type Logger = winston.Logger;
