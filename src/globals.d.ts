@@ -1,4 +1,5 @@
 import winston = require('winston');
+import { Router } from 'express';
 
 export interface IApplication {
   start(): Promise<void>;
@@ -16,6 +17,7 @@ export type Config = {
   env?: string;
   http?: {
     port?: number;
+    prefix?: string;
   };
   logging?: {
     level?: string;
@@ -34,4 +36,8 @@ export type Logger = winston.Logger;
 
 export interface ILoggerFactory {
   create(namespace: string): Logger;
+}
+
+export interface IRouter {
+  router: Router;
 }
