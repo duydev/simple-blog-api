@@ -10,7 +10,9 @@ export interface IServer {
 }
 
 export interface IDatabase {
-  authenticate(): Promise<void>;
+  models: any;
+  boot(): Promise<void>;
+  getModel(modelName: string): any;
 }
 
 export type Config = {

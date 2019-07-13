@@ -1,15 +1,18 @@
-import sequelize, { Model } from 'sequelize';
-
-export const userModelFactory = (sequelize: any) => {
-  class User extends Model {}
-
-  User.init(
-    {},
+export default (sequelize: any, DataTypes: any) => {
+  const User = sequelize.define(
+    'User',
     {
-      modelName: 'user',
-      sequelize
-    }
+      name: DataTypes.STRING,
+      email: DataTypes.STRING,
+      password: DataTypes.STRING,
+      lastLogin: DataTypes.DATE,
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE
+    },
+    {}
   );
-
+  User.associate = function(models: any) {
+    // associations can be defined here
+  };
   return User;
 };

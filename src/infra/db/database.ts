@@ -1,9 +1,12 @@
 import { IDatabase, Config, ILoggerFactory, Logger } from '../../globals';
 import { Sequelize } from 'sequelize';
+import path from 'path';
+import fs from 'fs';
 
 export class Database implements IDatabase {
   private logger: Logger;
   private sequelize: Sequelize;
+  models: any;
 
   constructor(config: Config, loggerFactory: ILoggerFactory) {
     this.logger = loggerFactory.create('app');
@@ -21,9 +24,16 @@ export class Database implements IDatabase {
       },
       dialect: 'postgres'
     });
+
+    this.models = {};
   }
 
-  async authenticate(): Promise<void> {
+  async boot(): Promise<void> {
+    await this.authenticate();
+    await this.initModels();
+  }
+
+  private async authenticate(): Promise<void> {
     await this.sequelize.authenticate();
 
     const dbConfig = this.sequelize.config;
@@ -32,5 +42,30 @@ export class Database implements IDatabase {
         dbConfig.port
       }/${dbConfig.database}`
     );
+  }
+
+  private async initModels(): Promise<void> {
+    const modelsPath = path.join(__dirname, 'models');
+
+    fs.readdirSync(modelsPath)
+      .filter(file => file.indexOf('.') !== 0 && file.slice(-3) === '.ts')
+      .forEach(file => {
+        const model = this.sequelize.import(path.join(modelsPath, file));
+        this.models[model.name] = model;
+      });
+
+    Object.keys(this.models).forEach(modelName => {
+      if (this.models[modelName].associate) {
+        this.models[modelName].associate(this.models[modelName]);
+      }
+    });
+  }
+
+  getModel(modelName: string): any {
+    if (!this.models[modelName]) {
+      throw Error(`Model ${modelName} is not support.`);
+    }
+
+    return this.models[modelName];
   }
 }

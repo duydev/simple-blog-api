@@ -5,7 +5,9 @@
   "rules": {
     "trailing-comma": false,
     "no-magic-numbers": false,
-    "no-shadowed-variable": false
+    "no-shadowed-variable": false,
+    "variable-name": false,
+    "ter-arrow-parens": false
   },
   "rulesDirectory": []
 }

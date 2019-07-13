@@ -7,7 +7,6 @@ import {
   IRouter
 } from '../../globals';
 import helmet from 'helmet';
-import statusMonitor from 'express-status-monitor';
 
 export class Server implements IServer {
   app: Express;
@@ -24,11 +23,7 @@ export class Server implements IServer {
 
     this.app = express();
     this.app.use(helmet());
-    this.app.use(config.http.prefix, rootRouter.router);
-
-    if (config.env === 'development') {
-      this.app.use(statusMonitor());
-    }
+    this.app.use(rootRouter.router);
   }
 
   async start(): Promise<void> {
