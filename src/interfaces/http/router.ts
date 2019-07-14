@@ -1,33 +1,50 @@
-import { IRouter, Config } from '../../globals';
+import {
+  IRouter,
+  Config,
+  IErrorHandler,
+  INotFoundHandler
+} from '../../globals';
 import { Router } from 'express';
 import bodyParser from 'body-parser';
 import compression from 'compression';
 import morgan from 'morgan';
 import cors from 'cors';
-import { ErrorHandler } from './middleware';
 import statusMonitor from 'express-status-monitor';
+import { scopePerRequest } from 'awilix-express';
+import { container } from '../../container';
 
 export class RootRouter implements IRouter {
   router: Router;
 
-  constructor(config: Config, errorHandler: ErrorHandler, userRouter: IRouter) {
-    this.router = Router();
+  constructor(
+    config: Config,
+    errorHandler: IErrorHandler,
+    notFoundHandler: INotFoundHandler,
+    userRouter: IRouter
+  ) {
+    const router = Router();
 
-    this.router.use(bodyParser.json());
-    this.router.use(cors());
-    this.router.use(compression());
-    this.router.use(morgan('dev'));
+    router.use(bodyParser.json());
+    router.use(cors());
+    router.use(compression());
+    router.use(morgan('dev'));
 
     if (config.env === 'development') {
-      this.router.use(statusMonitor());
+      router.use(statusMonitor());
     }
+
+    router.use(scopePerRequest(container));
 
     const apiRouter = Router();
 
-    apiRouter.use('/user', userRouter.router);
+    apiRouter.use('/users', userRouter.router);
 
-    this.router.use(config.http.prefix, apiRouter);
+    router.use(config.http.prefix, apiRouter);
 
-    this.router.use(errorHandler.handle());
+    router.use(notFoundHandler.handle());
+
+    router.use(errorHandler.handle());
+
+    this.router = router;
   }
 }

@@ -1,10 +1,11 @@
-import { Request, Response, NextFunction, ErrorRequestHandler } from 'express';
+import { Response, NextFunction, ErrorRequestHandler } from 'express';
+import { IRequest, IError, IErrorHandler } from '../../../globals';
 
-export class ErrorHandler {
+export class ErrorHandler implements IErrorHandler {
   handle(): ErrorRequestHandler {
-    return (err: Error, req: Request, res: Response, next: NextFunction) => {
-      res.status(500).json({
-        message: 'Internal Server Error'
+    return (err: IError, req: IRequest, res: Response, next: NextFunction) => {
+      res.status(err.httpCode || 500).json({
+        message: err.message || 'Internal Server Error'
       });
     };
   }

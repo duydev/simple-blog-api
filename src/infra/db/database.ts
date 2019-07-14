@@ -4,13 +4,10 @@ import path from 'path';
 import fs from 'fs';
 
 export class Database implements IDatabase {
-  private logger: Logger;
   private sequelize: Sequelize;
   models: any;
 
-  constructor(config: Config, loggerFactory: ILoggerFactory) {
-    this.logger = loggerFactory.create('app');
-
+  constructor(config: Config, private logger: Logger) {
     const dbConfig = config.database;
 
     this.sequelize = new Sequelize({

@@ -1,12 +1,10 @@
 import { container } from './container';
-import { IApplication } from './globals';
-import { LoggerFactory } from './infra/logging/logger-factory';
-
-const logger = container.resolve<LoggerFactory>('loggerFactory').create('app');
+import { Logger, IApplication } from './globals';
 
 container
-  .resolve<IApplication>('application')
+  .resolve<IApplication>('app')
   .start()
   .catch((err: Error) => {
+    const logger = container.resolve<Logger>('logger');
     logger.error(err);
   });

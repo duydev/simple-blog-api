@@ -4,7 +4,7 @@ export const config: Config = {
   env: process.env.NODE_ENV || 'development',
   http: {
     port: Number(process.env.PORT) || 3000,
-    prefix: 'api/'
+    prefix: '/api'
   },
   logging: {
     path: process.env.LOGGING_PATH || 'logs/',

@@ -1,10 +1,18 @@
 import { Router } from 'express';
-import { IRouter } from '../../../../globals';
+import { IRouter, IControllerHandler } from '../../../../globals';
 
 export class UserRouter implements IRouter {
   router: Router;
+  controllerName = 'user';
 
-  constructor() {
-    this.router = Router();
+  constructor(controllerHandler: IControllerHandler) {
+    const router = Router();
+
+    router.get(
+      '/',
+      controllerHandler.handle(this.controllerName, 'getAllUsers')
+    );
+
+    this.router = router;
   }
 }

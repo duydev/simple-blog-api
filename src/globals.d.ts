@@ -1,5 +1,7 @@
 import winston = require('winston');
-import { Router } from 'express';
+import { Router, RequestHandler, Request } from 'express';
+import { AwilixContainer } from 'awilix';
+import { ErrorRequestHandler } from 'express-serve-static-core';
 
 export interface IApplication {
   start(): Promise<void>;
@@ -42,4 +44,24 @@ export interface ILoggerFactory {
 
 export interface IRouter {
   router: Router;
+}
+
+export interface IErrorHandler {
+  handle(): ErrorRequestHandler;
+}
+
+export interface IControllerHandler {
+  handle(controllerName: string, methodName: string): RequestHandler;
+}
+
+export interface INotFoundHandler {
+  handle(): RequestHandler;
+}
+
+export interface IRequest extends Request {
+  container: AwilixContainer;
+}
+
+export interface IError extends Error {
+  httpCode: number;
 }
